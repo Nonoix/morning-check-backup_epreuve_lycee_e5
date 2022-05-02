@@ -1,0 +1,47 @@
+{% if in_progress | length > 0 %}
+<div class="in_progress">IN PROGRESS ({{ stats['backup']['in_progress'] }})</div>
+<div>
+    {% for server in in_progress %}
+        <table class="table-striped">
+        <caption>{{ server }} ({{ server_infos[server]['stats']['backup']['in_progress'] }})</caption>
+        <thead>
+            <tr>
+                <th>Job</th>
+                <th>VM</th>
+                <th>Status</th>
+                <th>Last success</th>
+                <th>Start date</th>
+                <th>Duration</th>
+                <th>Repository</th>
+                <th>Restore points</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set row_class = cycler("odd", "even") %}
+        {% for job in in_progress[server] %}
+            {% set vars = {'old_job': None} %}
+            {% set nb_vm = in_progress[server][job] | length %}
+            {% for vm in in_progress[server][job] %}
+                <tr class="{{ row_class.next() }}">
+                    {% if nb_vm > 1 and vars.old_job != job %}
+                    <td rowspan="{{ nb_vm }}">{{ job }}<br />{{ in_progress[server][job][vm]['retaincycles'] }} / {{ in_progress[server][job][vm]['retaindays'] }}</td>
+                    {% elif nb_vm > 1 and vars.old_job == job %}
+                    {% else %}
+                    <td>{{ job }}<br />{{ in_progress[server][job][vm]['retaincycles'] }} / {{ in_progress[server][job][vm]['retaindays'] }}</td>
+                    {% endif %}
+                    <td>{{ vm }}</td>
+                    <td>{{ in_progress[server][job][vm]['backup_status_details'] }}</td>
+                    <td class="{{ in_progress[server][job][vm]['lps_color'] }}">{{ in_progress[server][job][vm]['last_point_success'] }}</td>
+                    <td>{{ in_progress[server][job][vm]['start_date'] }}</td>
+                    <td class="{{ in_progress[server][job][vm]['duration_color'] }}">{{ in_progress[server][job][vm]['duration'] }}</td>
+                    <td>{{ in_progress[server][job][vm]['target_storage'] }}</td>
+                    <td class="{{ in_progress[server][job][vm]['rp_color'] }}">{{ in_progress[server][job][vm]['nb_restore_points'] }}</td>
+                </tr>
+                {% if vars.update({'old_job': job}) %}{% endif %}
+            {%- endfor %}
+        {%- endfor %}
+        </tbody>
+    </table>
+    {%- endfor %}
+</div>
+{% endif %}

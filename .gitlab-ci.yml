@@ -1,0 +1,18 @@
+include:
+  - '/.gitlab-ci/lint/build.yml'
+  - '/.gitlab-ci/lint/exec.yml'
+  - '/.gitlab-ci/veeam/build.yml'
+  - '/.gitlab-ci/veeam/crawl.yml'
+  - '/.gitlab-ci/process/build.yml'
+  - '/.gitlab-ci/process/work.yml'
+
+stages:
+  - build
+  - lint
+  - crawl
+  - process
+
+variables:
+  VAULT_JWT_ROLE: ar-smartinfra-data-protection-storage-morning-check-backup
+  VAULT_ADDR: https://vault.fr.arno
+  SLACK_HOOK: https://hooks.slack.com/services/XXXX/ZZZZZ/YYYYY

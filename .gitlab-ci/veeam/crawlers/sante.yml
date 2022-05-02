@@ -1,0 +1,13 @@
+crawler_veeam_sante_XXX-02-SR-VEE01:
+  variables:
+    SERVER_NAME: XXX-02-SR-VEE01
+    DATABASE_ADDRESS: 100.0.0.1 # XXX-02-SV-SQL01
+    DATABASE_NAME: VeeamBackup
+  extends: .crawler_veeam_sante
+
+crawler_veeam_sante_XXX-01-SR-VEE01:
+  variables:
+    SERVER_NAME: XXX-01-SR-VEE01
+    DATABASE_ADDRESS: 100.0.0.13 # XXX-01-SV-SQL01
+    DATABASE_NAME: VeeamBackup
+  extends: .crawler_veeam_sante

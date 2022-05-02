@@ -1,0 +1,5 @@
+wheel==0.35.1
+sentry-sdk==0.20.3
+hvac==0.10.8
+influxdb==5.3.1
+pyodbc==4.0.30

@@ -1,0 +1,41 @@
+include:
+  - '/.gitlab-ci/veeam/crawlers/sante.yml'
+
+
+.crawler_veeam:
+  image: ${CI_REGISTRY_IMAGE}/veeam:latest
+  stage: crawl
+  before_script:
+    - env | sort
+    - date -Iseconds
+    - echo "START JOB $CI_JOB_STAGE $CI_JOB_NAME"
+    - export VAULT_TOKEN=$(vault write -field=token auth/gitfr_jwt/login role="${VAULT_JWT_ROLE}" jwt="$CI_JOB_JWT")
+    - vault token renew -i 30m > /dev/null
+  script:
+    - python3 ./veeam/crawler.py
+  retry: 2
+   after_script:
+     - |-
+         if [[ $CI_JOB_STATUS != "success" ]]; then
+             echo "Send Slack Messages"
+             curl -s -X POST -H "Content-type: application/json" --data "{\"username\":\"[GitLab-Monitoring] A failed job was detected\",\"channel\":\"#fr-events\",\"attachments\":[{\"blocks\":[{\"fields\":[{\"text\":\"*Job Name*\\n${CI_JOB_NAME}\",\"type\":\"mrkdwn\"},{\"text\":\"*Job Stage*\\n${CI_JOB_STAGE}\",\"type\":\"mrkdwn\"}],\"type\":\"section\",\"text\":{\"text\":\"<${CI_PIPELINE_URL}|${CI_PIPELINE_URL}>\",\"type\":\"mrkdwn\"}}],\"color\":\"#ff0000\"}],\"icon_emoji\":\":gitlab:\"}" ${SLACK_HOOK}
+         fi
+  variables:
+    SENTRY_DSN: https://XXXX@sentry.io/43
+    VAULT_CREDENTIALS_PATH: secret/data/smartinfra/tools/stoback/backup_reporting/veeam
+    DATABASE_PORT: 1433
+  artifacts:
+    paths:
+      - ./artifacts/*.json
+    expire_in: 2 mos
+  rules:
+    - if: $CRAWLER_VEEAM == "0"
+      when: never
+    - if: ($CI_COMMIT_BRANCH == "main" && ($CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "schedule")) && ( $CI_JOB_NAME  =~ $DISABLE_CRAWLERS )
+      when: never
+    - if: ($CI_COMMIT_BRANCH == "main" && ($CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "schedule")) && ($CRAWLERS_JOBS == "" || $CRAWLERS_JOBS == null || $CI_JOB_NAME  =~ $CRAWLERS_JOBS )
+
+.crawler_veeam_sante:
+  tags:
+    - server-job-sante
+  extends: .crawler_veeam

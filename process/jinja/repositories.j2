@@ -1,0 +1,72 @@
+{% if repositories | length > 0 %}
+<div class="repositories">REPOSITORIES</div>
+<div>
+    {% for server in repositories %}
+        <table class="table-striped">
+        <caption>{{ server }}</caption>
+        <thead>
+            <tr>
+                <th>Repository</th>
+                <th>Free</th>
+                <th>Used</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set row_class = cycler("odd", "even") %}
+        {% for repo in repositories[server] %}
+            {% if repositories[server][repo]['id'] %}
+                <tr class="{{ row_class.next() }}">
+                    <td>{{ repo }} - [{{ repositories[server][repo]['path'] }}]</td>
+                    <td>
+                        <div class="{{ repositories[server][repo]['free_percent_color'] }}">
+                        {{ repositories[server][repo]['free'] }}
+                        {% if repositories[server][repo]['free_percent_color'] %}
+                            ({{ repositories[server][repo]['free_percent'] }}%)
+                        {% endif %}
+                        </div>
+                    </td>
+                    <td>{{ repositories[server][repo]['used'] }}</td>
+                    <td>{{ repositories[server][repo]['total'] }}</td>
+                </tr>
+            {% else %}
+                <tr class="{{ row_class.next() }}">
+                    <td>
+                        <b>{{ repo }}</b>
+                        {% for extent in repositories[server][repo] %}
+                            <br />{{ extent }} - [{{ repositories[server][repo][extent]['path'] }}]
+                        {%- endfor %}
+                    </td>
+                    <td>
+                        <div class="{{ repositories[server][repo][repositories[server][repo].keys() | list | first]['scaleout_free_percent_color'] }}">
+                            <b>{{ repositories[server][repo][repositories[server][repo].keys() | list | first]['scaleout_free'] }}</b>
+                        </div>
+                        {% for extent in repositories[server][repo] %}
+                            <div class="{{ repositories[server][repo][extent]['free_percent_color'] }}">
+                                {{ repositories[server][repo][extent]['free'] }}
+                                {% if repositories[server][repo][extent]['free_percent_color'] %}
+                                    ({{ repositories[server][repo][extent]['free_percent'] }}%)
+                                {% endif %}
+                            </div>
+                        {%- endfor %}
+                    </td>
+                    <td>
+                        <b>{{ repositories[server][repo][repositories[server][repo].keys() | list | first]['scaleout_used'] }}</b>
+                        {% for extent in repositories[server][repo] %}
+                            <br />{{ repositories[server][repo][extent]['used'] }}
+                        {%- endfor %}
+                    </td>
+                    <td>
+                        <b>{{ repositories[server][repo][repositories[server][repo].keys() | list | first]['scaleout_total'] }}</b>
+                        {% for extent in repositories[server][repo] %}
+                            <br />{{ repositories[server][repo][extent]['total'] }}
+                        {%- endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+        {%- endfor %}
+        </tbody>
+    </table>
+    {%- endfor %}
+</div>
+{% endif %}

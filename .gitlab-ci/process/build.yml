@@ -1,0 +1,18 @@
+build_process:
+  stage: build
+  tags:
+    - server-job
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/process/Dockerfile --destination ${CI_REGISTRY_IMAGE}/process:latest
+  only:
+    refs:
+      - main
+    variables:
+      - $CI_PIPELINE_SOURCE == "push"
+    changes:
+      - process/Dockerfile
+      - process/requirements.txt

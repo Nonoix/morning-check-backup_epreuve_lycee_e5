@@ -1,0 +1,49 @@
+{% if failed | length > 0 %}
+<div class="failed">FAILED ({{ stats['backup']['failed'] }})</div>
+<div>
+    {% for server in failed %}
+        <table class="table-striped">
+        <caption>{{ server }} ({{ server_infos[server]['stats']['backup']['failed'] }})</caption>
+        <thead>
+            <tr>
+                <th>Jobs</th>
+                <th>Virtual Machines</th>
+                <th>Error</th>
+                <th>Last succes</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Duration</th>
+                <th>Repository</th>
+                <th>Restore point</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set row_class = cycler("odd", "even") %}
+        {% for job in failed[server] %}
+            {% set vars = {'old_job': None} %}
+            {% set nb_vm = failed[server][job] | length %}
+            {% for vm in failed[server][job] %}
+                <tr class="{{ row_class.next() }}">
+                    {% if nb_vm > 1 and vars.old_job != job %}
+                    <td rowspan="{{ nb_vm }}">{{ job }}<br />{{ failed[server][job][vm]['retaincycles'] }} / {{ failed[server][job][vm]['retaindays'] }}</td>
+                    {% elif nb_vm > 1 and vars.old_job == job %}
+                    {% else %}
+                    <td>{{ job }}<br />{{ failed[server][job][vm]['retaincycles'] }} / {{ failed[server][job][vm]['retaindays'] }}</td>
+                    {% endif %}
+                    <td>{{ vm }}</td>
+                    <td>{{ failed[server][job][vm]['reason'] }}</td>
+                    <td class="{{ failed[server][job][vm]['lps_color'] }}">{{ failed[server][job][vm]['last_point_success'] }}</td>
+                    <td>{{ failed[server][job][vm]['start_date'] }}</td>
+                    <td>{{ failed[server][job][vm]['end_date'] }}</td>
+                    <td class="{{ failed[server][job][vm]['duration_color'] }}">{{ failed[server][job][vm]['duration'] }}</td>
+                    <td>{{ failed[server][job][vm]['target_storage'] }}</td>
+                    <td class="{{ failed[server][job][vm]['rp_color'] }}">{{ failed[server][job][vm]['nb_restore_points'] }}</td>
+                </tr>
+                {% if vars.update({'old_job': job}) %}{% endif %}
+            {%- endfor %}
+        {%- endfor %}
+        </tbody>
+    </table>
+    {%- endfor %}
+</div>
+{% endif %}

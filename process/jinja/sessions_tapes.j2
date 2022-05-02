@@ -1,0 +1,35 @@
+{% if tapes | length > 0 %}
+<div class="tapes">TAPE JOBS ({{ stats['tape']['sessions'] }})</div>
+<div>
+    {% for server in tapes %}
+        <table class="table-striped">
+        <caption>{{ server }} ({{ tapes[server] | length }})</caption>
+        <thead>
+            <tr>
+                <th>Jobs</th>
+                <th>Status</th>
+                <th>Error</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Duration</th>
+                <th>Media pool</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set row_class = cycler("odd", "even") %}
+        {% for job in tapes[server] %}
+            <tr class="{{ row_class.next() }}">
+                <td>{{ job }}</td>
+                <td>{{ tapes[server][job]['backup_status_details'] }}</td>
+                <td>{{ tapes[server][job]['reason'] }}</td>
+                <td>{{ tapes[server][job]['start_date'] }}</td>
+                <td>{{ tapes[server][job]['end_date'] }}</td>
+                <td class="{{ tapes[server][job]['duration_color'] }}">{{ tapes[server][job]['duration'] }}</td>
+                <td>{{ tapes[server][job]['mediapool_name'] }}</td>
+            </tr>
+        {%- endfor %}
+        </tbody>
+    </table>
+    {%- endfor %}
+</div>
+{% endif %}

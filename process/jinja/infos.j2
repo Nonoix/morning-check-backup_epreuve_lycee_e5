@@ -1,0 +1,12 @@
+<table class="infos">
+    <tbody>
+        <tr>
+            <td class="{{ stats['backup']['color'] }}">{{ stats['backup']['emoji'] }}</td>
+            <td class="bg-info"><b>{{ stats['backup']['in_progress'] }} In Progress</b><br />{{ stats['backup']['in_progress%'] }}%</td>
+            <td class="bg-warning"><b>{{ stats['backup']['warning'] }} Warning</b><br />{{ stats['backup']['warning%'] }}%</td>
+            <td class="bg-error"><b>{{ stats['backup']['failed'] }} Failed</b><br />{{ stats['backup']['failed%'] }}%</td>
+            <td class="bg-success"><b>{{ stats['backup']['success'] }} Success</b><br />{{ stats['backup']['success%'] }}%</td>
+            <td class="bg-grey"><b>{{ stats['backup']['total'] }} Total</b></td>
+        </tr>
+    </tbody>
+</table>

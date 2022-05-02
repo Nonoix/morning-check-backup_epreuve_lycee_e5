@@ -1,0 +1,13 @@
+lint_exec:
+  stage: lint
+  image: ${CI_REGISTRY_IMAGE}/lint:latest
+  tags:
+    - server-job
+  allow_failure: true
+  script:
+    - flake8
+  only:
+    changes:
+      - "**/*.py"
+    variables:
+      - $CI_PIPELINE_SOURCE != "web" && $CI_PIPELINE_SOURCE != "schedule"

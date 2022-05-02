@@ -1,0 +1,144 @@
+html, body {
+    background-color: #d9d9d9;
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+}
+.title {
+    text-align: center;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 22pt;
+    font-weight: bold;
+    margin: 0;
+
+}
+.tapes {
+    text-align: center;
+    background-color: #bdd7ee;
+    font-size: 15pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.in_progress {
+    text-align: center;
+    background-color: #ffffaf;
+    font-size: 15pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+
+.failed {
+    text-align: center;
+    background-color: #ff6161;
+    font-size: 15pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.repositories {
+    text-align: center;
+    background-color: #dba4ff;
+    font-size: 15pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    text-align: center;
+}
+.center {
+    text-align: center;
+}
+.table-striped  {
+    border: 1px solid #000000;
+    border-collapse: collapse;
+}
+
+a.vm {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.infos {
+    font-size: 20pt;
+}
+
+.table-striped caption {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.odd {
+    background: #d3d3d3
+}
+
+.even {
+    background: #a7a7a7
+}
+
+
+.table-striped thead > tr {
+    background: #c4c4c4
+}
+
+.table-striped td , .table-striped th + th {
+    border-left:1px solid #000000;
+}
+
+.table-striped td:first-child {
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+
+.table-striped td[rowspan] + td {
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+
+.bg-error {
+    background-color: #ff6161 !important;
+}
+
+.bg-success {
+    background-color: #61ff76 !important;
+}
+
+.fg-success {
+    color: #00814b !important;
+}
+
+.bg-warning {
+    background-color: #ffbc6a !important;
+}
+
+.bg-info {
+    background-color: #ffffaf !important;
+}
+
+.bg-grey {
+    background-color: #a5a5a5 !important;
+}
